@@ -1,0 +1,30 @@
+uid: main_widget_Floor_Card
+tags: []
+props:
+  parameters:
+    - description: A text prop
+      label: Prop 1
+      name: prop1
+      required: false
+      type: TEXT
+    - context: item
+      description: An item to control
+      label: Item
+      name: item
+      required: false
+      type: TEXT
+  parameterGroups: []
+timestamp: Sep 25, 2022, 12:20:29 AM
+component: f7-block
+config:
+  style:
+    flex: 1 1 auto
+    overflow: scroll
+    margin-top: -1em
+    margin-bottom: -1em
+slots:
+  default:
+    - component: oh-label-card
+      config:
+        title: This is a dummy card only to be shown on Floor Level
+        visible: '= vars.objVar && vars.objVar.selectSection=="SECTION1" ? true : false'
