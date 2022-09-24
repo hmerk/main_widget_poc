@@ -1,0 +1,264 @@
+uid: main_widget_Security_Card
+tags: []
+props:
+  parameters:
+    - default: Contacts & Alarm
+      description: Title of the card
+      label: Title
+      name: Title
+      required: true
+      type: TEXT
+      advanced: false
+    - context: item
+      description: Security Group Item
+      label: Security Group
+      name: securityGroup
+      required: true
+      type: TEXT
+    - context: item
+      description: Security Mode Item
+      label: Security Mode
+      name: securityMode
+      required: true
+      type: TEXT
+timestamp: Sep 18, 2022, 11:35:36 AM
+component: f7-card
+config:
+  style:
+    background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.1) 0%, rgba(102, 102, 102, 0.7) 100%)
+    --f7-card-header-border-color: transparent
+    border-radius: 10px
+    box-shadow: 5px 5px 15px 1px rgba(0,0,0,0.05)
+    margin-left: 5px
+    margin-right: 5px
+slots:
+  default:
+    - component: f7-card-header
+      config:
+        style:
+          height: auto
+      slots:
+        default:
+          - component: oh-icon
+            config:
+              icon: iconify:bi:shield-fill-check
+              height: 25px
+              style:
+                color: green
+          - component: f7-block
+            config:
+              style:
+                position: absolute
+                left: 50px
+            slots:
+              default:
+                - component: Label
+                  config:
+                    text: =props.Title
+                    style:
+                      margin-top: 3px
+                      fontSize: 15px
+                      font-weight: 600
+    - component: f7-card-content
+      config:
+        style:
+          height: auto
+      slots:
+        default:
+          - component: f7-row
+            config:
+              style:
+                justify-content: space-between
+            slots:
+              default:
+                - component: f7-col
+                  config:
+                    style:
+                      text-align: center
+                  slots:
+                    default:
+                      - component: oh-icon
+                        config:
+                          icon: iconify:bi:shield-fill-check
+                          height: 45px
+                          style:
+                            color: '=items[props.securityMode].state != "armed-home"  ? "gray" : "red"'
+                      - component: Label
+                        config:
+                          text: ARMED HOME
+                - component: f7-col
+                  config:
+                    style:
+                      text-align: center
+                  slots:
+                    default:
+                      - component: oh-icon
+                        config:
+                          icon: iconify:bi:shield-fill-check
+                          height: 45px
+                          style:
+                            color: '=items[props.securityMode].state != "disarmed"  ? "gray" : "green"'
+                      - component: Label
+                        config:
+                          text: DISARMED
+                - component: f7-col
+                  config:
+                    style:
+                      text-align: center
+                  slots:
+                    default:
+                      - component: oh-icon
+                        config:
+                          icon: iconify:bi:shield-fill-check
+                          height: 45px
+                          style:
+                            color: '=items[props.securityMode].state != "armed-away"  ? "gray" : "red"'
+                      - component: Label
+                        config:
+                          text: ARMED AWAY
+          - component: f7-row
+            config:
+              style:
+                justify-content: space-between
+                margin-top: 20px
+            slots:
+              default:
+                - component: Label
+                  config:
+                    text: Door & Window Contacts
+                    style:
+                      margin-top: 3px
+                      fontSize: 15px
+                      font-weight: 500
+          - component: oh-repeater
+            config:
+              fetchMetadata: semantics,widgetOrder,uiSemantics
+              fragment: true
+              for: securityGroupMember
+              sourceType: itemsInGroup
+              groupItem: =props.securityGroup
+              filter: '(loop.securityGroupMember.type=="Contact") ? true : false'
+            slots:
+              default:
+                - component: f7-row
+                  config:
+                    style:
+                      justify-content: space-between
+                      margin-top: 5px
+                  slots:
+                    default:
+                      - component: Label
+                        config:
+                          text: =loop.securityGroupMember.label
+                          style:
+                            margin-top: 3px
+                            fontSize: 15px
+                            font-weight: 400
+                      - component: f7-chip
+                        config:
+                          style:
+                            height: 17px
+                            fontSize: 15px
+                          text: '=loop.securityGroupMember.state != "CLOSED" ? " OPEN " : "CLOSED"'
+                          textColor: white
+                          color: '=loop.securityGroupMember.state != "CLOSED" ? "red" : "green"'
+          - component: f7-row
+            config:
+              style:
+                justify-content: space-between
+                margin-top: 10px
+            slots:
+              default:
+                - component: Label
+                  config:
+                    text: Motion
+                    style:
+                      margin-top: 3px
+                      fontSize: 15px
+                      font-weight: 500
+          - component: oh-repeater
+            config:
+              fetchMetadata: semantics,widgetOrder,uiSemantics
+              fragment: true
+              for: securityGroupMember
+              sourceType: itemsInGroup
+              groupItem: =props.securityGroup
+              filter: '(loop.securityGroupMember.category=="motion") ? true : false'
+            slots:
+              default:
+                - component: f7-row
+                  config:
+                    style:
+                      justify-content: space-between
+                      margin-top: 5px
+                  slots:
+                    default:
+                      - component: Label
+                        config:
+                          text: =loop.securityGroupMember.label
+                          style:
+                            margin-top: 3px
+                            fontSize: 15px
+                            font-weight: 400
+                      - component: f7-chip
+                        config:
+                          style:
+                            height: 17px
+                            fontSize: 15px
+                          text: '=loop.securityGroupMember.state != "OFF" ? "MOTION" : " QUIET "'
+                          textColor: white
+                          color: '=loop.securityGroupMember.state != "OFF" ? "red" : "green"'
+          - component: f7-row
+            config:
+              style:
+                justify-content: space-between
+                margin-top: 10px
+            slots:
+              default:
+                - component: Label
+                  config:
+                    text: Surveillance
+                    style:
+                      margin-top: 3px
+                      fontSize: 15px
+                      font-weight: 500
+          - component: oh-repeater
+            config:
+              fetchMetadata: semantics,widgetOrder,uiSemantics
+              fragment: true
+              for: securityGroupMember
+              sourceType: itemsInGroup
+              groupItem: =props.securityGroup
+              filter: '(loop.securityGroupMember.category=="camera") ? true : false'
+            slots:
+              default:
+                - component: f7-row
+                  config:
+                    style:
+                      justify-content: space-between
+                      margin-top: 5px
+                  slots:
+                    default:
+                      - component: Label
+                        config:
+                          text: =loop.securityGroupMember.label
+                          margin-top: 3px
+                          fontSize: 15px
+                          font-weight: 400
+                      - component: f7-chip
+                        config:
+                          style:
+                            height: 17px
+                            fontSize: 15px
+                          text: '=loop.securityGroupMember.state != "OFF" ? "  ON  " : "  OFF  "'
+                          textColor: white
+                          color: '=loop.securityGroupMember.state != "OFF" ? "green" : "red"'
+    - component: f7-card-footer
+      config:
+        style:
+          height: auto
+      slots:
+        default:
+          - component: Label
+            config:
+              text: '=items[props.Item1].state != "ON" && items[props.Item2].state != "ON" && items[props.Item3].state != "ON" && items[props.Item4].state != "ON" && items[props.Item5].state != "ON" && items[props.Item6].state != "ON" && items[props.Item7].state != "ON" && items[props.Item8].state != "ON" && items[props.Item9].state != "ON" && items[props.Item10].state != "ON" ? "Everything OFF. System ARMED." : "One or more items ON. System NOT ARMED."'
