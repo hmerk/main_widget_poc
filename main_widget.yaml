@@ -2,8 +2,7 @@ uid: main_widget_poc
 tags: []
 props:
   parameters:
-    - default: black
-      description: Set default color for Text
+    - description: Set default color for Text
       label: Text color
       name: textColor
       required: false
@@ -50,7 +49,7 @@ config:
     margin: 0
     padding: 0
     widht: 100vh
-    --menu-text-color: =props.textColor
+    --menu-text-color: '= (!props.textColor) ? (themeOptions.dark=="light")? black : white : props.textColor'
     --f7-button-text-color: "#8c8c8c"
   stylesheet: >
     .selected_menu_item {
