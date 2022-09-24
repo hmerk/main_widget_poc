@@ -1,0 +1,95 @@
+uid: main_widget_Room_Card
+tags: []
+props:
+  parameters:
+    - description: A text prop
+      label: Prop 1
+      name: prop1
+      required: false
+      type: TEXT
+    - context: item
+      description: An item to control
+      label: Item
+      name: item
+      required: false
+      type: TEXT
+  parameterGroups: []
+timestamp: Sep 25, 2022, 12:07:05 AM
+component: f7-block
+config:
+  style:
+    flex: 1 1 auto
+    overflow: scroll
+    margin-top: -1em
+    margin-bottom: -1em
+slots:
+  default:
+    - component: oh-repeater
+      config:
+        fetchMetadata: semantics,metadata,listWidget
+        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.room
+        for: equipmentItem
+        itemTags: Blinds
+        sourceType: itemsWithTags
+      slots:
+        default:
+          - component: oh-repeater
+            config:
+              fetchMetadata: semantics,metadata,listWidget
+              filter: '(loop.shutterItem.type=="Rollershutter") ? true : false'
+              for: shutterItem
+              groupItem: =loop.equipmentItem.name
+              sourceType: itemsInGroup
+            slots:
+              default:
+                - component: widget:main_widget_Rollershutter_Card
+                  config:
+                    RollerItem: =loop.shutterItem.name
+                    RollerTitle: =loop.shutterItem.label
+                    visible: '=vars.objVar.selectThing=="Rollers" ? true : false'
+    - component: oh-repeater
+      config:
+        fetchMetadata: semantics,metadata,listWidget
+        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.room
+        for: equipmentItem
+        itemTags: Lightbulb
+        sourceType: itemsWithTags
+      slots:
+        default:
+          - component: widget:main_widget_Light_Card
+            config:
+              equipmentItem: =loop.equipmentItem.name
+              visible: '=vars.objVar.selectThing=="Lights" ? true : false'
+    - component: oh-repeater
+      config:
+        fetchMetadata: semantics,metadata,listWidget
+        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.room
+        for: equipmentItem
+        itemTags: RadiatorControl
+        sourceType: itemsWithTags
+      slots:
+        default:
+          - component: oh-repeater
+            config:
+              fetchMetadata: semantics,metadata,listWidget
+              for: tempItem
+              groupItem: =loop.equipmentItem.name
+              sourceType: itemsInGroup
+            slots:
+              default:
+                - component: widget:Temp_Control
+                  config:
+                    style:
+                      flex: 1 1 auto
+                      overflow-y: auto
+                      position: relative
+                    visible: '=vars.objVar.selectThing=="Climate" ? true : false'
+                    widgettrend: =loop.tempItem.name
+    - component: Label
+      config:
+        style:
+          flex: 1 1 auto
+          overflow-y: auto
+          position: relative
+        text: =vars.objVar.selectSection + vars.floor
+        visible: "=vars.objVar ? true : false"
