@@ -21,7 +21,13 @@ props:
       name: securityMode
       required: true
       type: TEXT
-timestamp: Sep 18, 2022, 11:35:36 AM
+    - context: item
+      description: Security PIN Item
+      label: Security PIN
+      name: referencePIN
+      required: false
+      type: TEXT
+timestamp: Sep 25, 2022, 2:53:46 AM
 component: f7-card
 config:
   style:
@@ -77,14 +83,30 @@ slots:
                       text-align: center
                   slots:
                     default:
-                      - component: oh-icon
+                      - component: oh-button
                         config:
-                          icon: iconify:bi:shield-fill-check
-                          height: 45px
+                          action: popup
+                          actionModal: widget:main_widget_Security_Keypad
+                          actionModalConfig:
+                            securityMode: =props.securityMode
+                            referencePIN: =props.referencePIN
+                            targetMode: armed-home
+                          class:
+                            - padding-top-half
+                            - display-flex
+                            - flex-direction-column
+                          fill: '=vars.objVar.selectThing=="Security" ? true : false'
+                          icon-f7: checkmark_shield_fill
+                          iconColor: '=items[props.securityMode].state != "armed-home"  ? "gray" : "red"'
+                          iconSize: 60
                           style:
-                            color: '=items[props.securityMode].state != "armed-home"  ? "gray" : "red"'
-                      - component: Label
-                        config:
+                            --f7-button-bg-color: transparent
+                            --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Security" ? "F8BB00" : "transparent"'
+                            --f7-button-padding-horizontal: 0px
+                            --f7-button-padding-vertical: 0px
+                            --f7-button-text-color: 'themeOptions.dark=="light" ? white : black'
+                            font-size: 16px
+                            height: auto
                           text: ARMED HOME
                 - component: f7-col
                   config:
@@ -92,14 +114,30 @@ slots:
                       text-align: center
                   slots:
                     default:
-                      - component: oh-icon
+                      - component: oh-button
                         config:
-                          icon: iconify:bi:shield-fill-check
-                          height: 45px
+                          action: popup
+                          actionModal: widget:main_widget_Security_Keypad
+                          actionModalConfig:
+                            securityMode: =props.securityMode
+                            referencePIN: =props.referencePIN
+                            targetMode: disarmed
+                          class:
+                            - padding-top-half
+                            - display-flex
+                            - flex-direction-column
+                          fill: '=vars.objVar.selectThing=="Security" ? true : false'
+                          icon-f7: checkmark_shield_fill
+                          iconColor: '=items[props.securityMode].state != "disarmed"  ? "gray" : "green"'
+                          iconSize: 60
                           style:
-                            color: '=items[props.securityMode].state != "disarmed"  ? "gray" : "green"'
-                      - component: Label
-                        config:
+                            --f7-button-bg-color: transparent
+                            --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Security" ? "F8BB00" : "transparent"'
+                            --f7-button-padding-horizontal: 0px
+                            --f7-button-padding-vertical: 0px
+                            --f7-button-text-color: 'themeOptions.dark=="light" ? white : black'
+                            font-size: 16px
+                            height: auto
                           text: DISARMED
                 - component: f7-col
                   config:
@@ -107,14 +145,30 @@ slots:
                       text-align: center
                   slots:
                     default:
-                      - component: oh-icon
+                      - component: oh-button
                         config:
-                          icon: iconify:bi:shield-fill-check
-                          height: 45px
+                          action: popup
+                          actionModal: widget:main_widget_Security_Keypad
+                          actionModalConfig:
+                            securityMode: =props.securityMode
+                            referencePIN: =props.referencePIN
+                            targetMode: armed-away
+                          class:
+                            - padding-top-half
+                            - display-flex
+                            - flex-direction-column
+                          fill: '=vars.objVar.selectThing=="Security" ? true : false'
+                          icon-f7: checkmark_shield_fill
+                          iconColor: '=items[props.securityMode].state != "armed-away"  ? "gray" : "red"'
+                          iconSize: 60
                           style:
-                            color: '=items[props.securityMode].state != "armed-away"  ? "gray" : "red"'
-                      - component: Label
-                        config:
+                            --f7-button-bg-color: transparent
+                            --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Security" ? "F8BB00" : "transparent"'
+                            --f7-button-padding-horizontal: 0px
+                            --f7-button-padding-vertical: 0px
+                            --f7-button-text-color: 'themeOptions.dark=="light" ? white : black'
+                            font-size: 16px
+                            height: auto
                           text: ARMED AWAY
           - component: f7-row
             config:
