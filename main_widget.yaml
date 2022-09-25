@@ -1,4 +1,4 @@
-uid: main_widget
+uid: main_widget_poc
 tags: []
 props:
   parameters:
@@ -44,7 +44,7 @@ props:
       required: false
       type: TEXT
   parameterGroups: []
-timestamp: Sep 25, 2022, 2:07:57 AM
+timestamp: Sep 25, 2022, 12:19:06 PM
 component: f7-block
 config:
   style:
@@ -54,7 +54,8 @@ config:
     justify-content: space-between
     margin: 0
     padding: 0
-    widht: 100vh
+    width: 100%
+    background: =(themeOptions.dark=="light") ? ("white"):("black")
     --menu-text-color: '= (!props.textColor) ? (themeOptions.dark=="light")? black : white : props.textColor'
     --f7-button-text-color: "#8c8c8c"
     --opmw-menu-text-color: =(themeOptions.dark=="light")?("#8C8C8C"):("#848484")
@@ -64,10 +65,12 @@ config:
       text-decoration-color: #F8BB00 !important;
       text-decoration: underline;
       text-underline-offset: 2.px;
+      font-weight: bold;
     } 
 
     .unselected_menu_item {
       color: #8C8C8C;
+      font-weight: 300;
     }
 slots:
   default:
@@ -103,10 +106,9 @@ slots:
                           actionVariableValue:
                             selectSection: ="SECTION" + loop.baseMenu_idx
                           large: true
-                          class: '=vars.objVar.selectSection=="SECTION" + loop.baseMenu_idx ? "selected_menu_item" : "unselected_menu_item"'
+                          class: '=(vars.objVar && (vars.objVar.selectSection=="SECTION" + loop.baseMenu_idx)) ? "selected_menu_item" : "unselected_menu_item"'
                           style:
                             font-size: 24px
-                            font-weight: 200
                           text: =loop.baseMenu
           - component: f7-row
             config:
@@ -235,13 +237,11 @@ slots:
                                       action: variable
                                       actionVariable: floor
                                       actionVariableValue: =loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split('&')[1]].name
+                                      class: '=(vars.floor ==(loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
                                       style:
                                         flex: 0 0 auto
                                         height: 2em
                                         order: =(((vars.buttonIndexFloor || 0) % loop.menuButtonFloor_source.length) + loop.menuButtonFloor_source.length + loop.menuButtonFloor_idx) % loop.menuButtonFloor_source.length
-                                        color: '=vars.floor ==(loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split("&")[1]].name) ? props.textColor : "gray"'
-                                        text-decoration: underline
-                                        text-decoration-color: '=vars.floor ==(loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split("&")[1]].name) ? "#F8BB00" : "transparent"'
                                         text-underline-offset: 4px
                                       text: =loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split('&')[1]].label
                 - component: oh-button
@@ -310,13 +310,11 @@ slots:
                                       action: variable
                                       actionVariable: room
                                       actionVariableValue: =loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split('&')[1]].name
+                                      class: '=(vars.room ==(loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
                                       style:
                                         flex: 0 0 auto
                                         height: 2em
                                         order: =(((vars.buttonIndexRoom || 0) % loop.menuButtonRoom_source.length) + loop.menuButtonRoom_source.length + loop.menuButtonRoom_idx) % loop.menuButtonRoom_source.length
-                                        color: '=vars.room ==(loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split("&")[1]].name) ? props.textColor : "gray"'
-                                        text-decoration: underline
-                                        text-decoration-color: '=vars.room ==(loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split("&")[1]].name) ? "#F8BB00" : "transparent"'
                                         text-underline-offset: 4px
                                       text: =loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split('&')[1]].label
                 - component: oh-button
