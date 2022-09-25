@@ -44,7 +44,7 @@ props:
       required: false
       type: TEXT
   parameterGroups: []
-timestamp: Sep 25, 2022, 12:19:06 PM
+timestamp: Sep 25, 2022, 4:06:06 PM
 component: f7-block
 config:
   style:
@@ -85,6 +85,7 @@ slots:
             config:
               style:
                 flex: 1 1 auto
+                justify-content: center
             slots:
               default:
                 - component: oh-repeater
@@ -109,6 +110,7 @@ slots:
                           class: '=(vars.objVar && (vars.objVar.selectSection=="SECTION" + loop.baseMenu_idx)) ? "selected_menu_item" : "unselected_menu_item"'
                           style:
                             font-size: 24px
+                            width: 25%
                           text: =loop.baseMenu
           - component: f7-row
             config:
