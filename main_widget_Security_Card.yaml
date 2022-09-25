@@ -31,7 +31,7 @@ timestamp: Sep 25, 2022, 2:53:46 AM
 component: f7-card
 config:
   style:
-    background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.1) 0%, rgba(102, 102, 102, 0.7) 100%)
+    background: =(themeOptions.dark=="light") ? ("white"):("black")
     --f7-card-header-border-color: transparent
     border-radius: 10px
     box-shadow: 5px 5px 15px 1px rgba(0,0,0,0.05)
@@ -105,7 +105,7 @@ slots:
                             --f7-button-padding-horizontal: 0px
                             --f7-button-padding-vertical: 0px
                             --f7-button-text-color: 'themeOptions.dark=="light" ? white : black'
-                            font-size: 16px
+                            font-size: 14px
                             height: auto
                           text: ARMED HOME
                 - component: f7-col
@@ -136,7 +136,7 @@ slots:
                             --f7-button-padding-horizontal: 0px
                             --f7-button-padding-vertical: 0px
                             --f7-button-text-color: 'themeOptions.dark=="light" ? white : black'
-                            font-size: 16px
+                            font-size: 14px
                             height: auto
                           text: DISARMED
                 - component: f7-col
@@ -167,7 +167,7 @@ slots:
                             --f7-button-padding-horizontal: 0px
                             --f7-button-padding-vertical: 0px
                             --f7-button-text-color: 'themeOptions.dark=="light" ? white : black'
-                            font-size: 16px
+                            font-size: 14px
                             height: auto
                           text: ARMED AWAY
           - component: f7-row
