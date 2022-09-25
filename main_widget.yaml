@@ -1,4 +1,4 @@
-uid: main_widget_poc
+uid: main_widget
 tags: []
 props:
   parameters:
@@ -35,10 +35,16 @@ props:
       description: Security Mode Item
       label: Security Mode
       name: securityMode
-      required: true
+      required: false
+      type: TEXT
+    - context: item
+      description: Security PIN Item
+      label: Security PIN
+      name: referencePIN
+      required: false
       type: TEXT
   parameterGroups: []
-timestamp: Sep 25, 2022, 12:18:55 AM
+timestamp: Sep 25, 2022, 2:07:57 AM
 component: f7-block
 config:
   style:
@@ -51,6 +57,7 @@ config:
     widht: 100vh
     --menu-text-color: '= (!props.textColor) ? (themeOptions.dark=="light")? black : white : props.textColor'
     --f7-button-text-color: "#8c8c8c"
+    --opmw-menu-text-color: =(themeOptions.dark=="light")?("#8C8C8C"):("#848484")
   stylesheet: >
     .selected_menu_item {
       color: var(--menu-text-color);
@@ -328,6 +335,7 @@ slots:
         scenesGroup: =props.scenesGroup
         securityGroup: =props.securityGroup
         securityMode: =props.securityMode
+        referencePIN: =props.referencePIN
     - component: widget:main_widget_Floor_Card
     - component: widget:main_widget_Room_Card
     - component: f7-block
