@@ -29,6 +29,7 @@ timestamp: Sep 25, 2022, 2:39:58 AM
 component: f7-block
 config:
   style:
+    background: =(themeOptions.dark=="light") ? ("white"):("black")
     --f7-button-text-color: var(--f7-text-color)
     --f7-button-bg-color: var(--f7-card-bg-color)
     --f7-theme-color-rgb: var(--f7-color-blue-rgb)
