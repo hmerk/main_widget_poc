@@ -25,7 +25,7 @@ props:
       required: true
       type: TEXT
   parameterGroups: []
-timestamp: Sep 25, 2022, 2:39:58 AM
+timestamp: Sep 25, 2022, 4:21:12 PM
 component: f7-block
 config:
   style:
@@ -229,7 +229,7 @@ slots:
                     action: command
                     disabled: =!vars.pincode
                     actionItem: =props.securityMode
-                    actionCommand: '=(items[props.referencePIN].state === vars.pincode) ? props.targetMode : ""'
+                    actionCommand: '=(items[props.referencePIN].state != vars.pincode) ? "" : props.targetMode'
                     actionFeedback: ='{ "text":"Alarmmodus geändert","position":"center","closeButton":"true" }'
                     clearVariable: pincode
                     popup-close: true
