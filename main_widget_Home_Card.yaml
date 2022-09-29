@@ -33,7 +33,7 @@ props:
       required: false
       type: TEXT
   parameterGroups: []
-timestamp: Sep 25, 2022, 2:17:19 AM
+timestamp: Sep 29, 2022, 12:08:45 PM
 component: f7-block
 config:
   style:
@@ -70,11 +70,3 @@ slots:
         securityMode: =props.securityMode
         referencePIN: =props.referencePIN
         visible: '=vars.objVar ? ((vars.objVar.selectSection + vars.objVar.selectThing)=="SECTION0Security") ? true : false : false'
-    - component: Label
-      config:
-        style:
-          flex: 1 1 auto
-          overflow-y: auto
-          position: relative
-        text: =vars.objVar.selectSection + vars.floor
-        visible: "=vars.objVar ? true : false"
