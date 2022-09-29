@@ -44,7 +44,7 @@ props:
       required: false
       type: TEXT
   parameterGroups: []
-timestamp: Sep 25, 2022, 4:06:06 PM
+timestamp: Sep 29, 2022, 11:22:46 AM
 component: f7-block
 config:
   style:
@@ -72,6 +72,23 @@ config:
       color: #8C8C8C;
       font-weight: 300;
     }
+
+    .selected_bottom_navbar_item {
+     color: white;
+     
+     font-size: 12px;
+     height: auto;
+     --f7-button-bg-color: transparent;  
+
+    }  
+
+    .unselected_bottom_navbar_item {
+     
+     color: #8c8c8c;
+     font-size: 12px;
+     height: auto;
+     --f7-button-bg-color: transparent  
+    } 
 slots:
   default:
     - component: f7-block
@@ -86,6 +103,9 @@ slots:
               style:
                 flex: 1 1 auto
                 justify-content: center
+                margin-left: 2%
+                margin-right: 2%
+                gap: 10px
             slots:
               default:
                 - component: oh-repeater
@@ -106,11 +126,15 @@ slots:
                           actionVariable: objVar
                           actionVariableValue:
                             selectSection: ="SECTION" + loop.baseMenu_idx
+                            floor: =vars.objVar.floor
+                            room: =vars.objVar.room
                           large: true
-                          class: '=(vars.objVar && (vars.objVar.selectSection=="SECTION" + loop.baseMenu_idx)) ? "selected_menu_item" : "unselected_menu_item"'
+                          class: '=vars.objVar.selectSection=="SECTION" + loop.baseMenu_idx ? "selected_menu_item" : "unselected_menu_item"'
                           style:
                             font-size: 24px
-                            width: 25%
+                            font-weight: 200
+                            flex: 0 1 auto
+                            width: auto
                           text: =loop.baseMenu
           - component: f7-row
             config:
@@ -137,11 +161,12 @@ slots:
                       height: 2em
                 - component: oh-repeater
                   config:
-                    for: menuArray
+                    fetchMetadata: metadata,semantics,widgetOrder
                     fragment: true
+                    for: menuArray
                     sourceType: itemsWithTags
-                    itemTags: Floor
-                    fetchMetadata: widgetOrder
+                    itemTags: ","
+                    filter: (loop.menuArray.metadata) && (loop.menuArray.metadata.semantics.value).includes("Floor")
                     map: loop.menuArray_source
                   slots:
                     default:
@@ -166,8 +191,10 @@ slots:
                                   - component: oh-button
                                     config:
                                       action: variable
-                                      actionVariable: floor
-                                      actionVariableValue: =loop.menuArray[loop.menuButtonHome_source.sort()[loop.menuButtonHome_idx].split('&')[1]].name
+                                      actionVariable: objVar
+                                      actionVariableValue:
+                                        selectSection: = vars.objVar.selectSection
+                                        floor: =loop.menuArray[loop.menuButtonHome_source.sort()[loop.menuButtonHome_idx].split('&')[1]].name
                                       style:
                                         flex: 0 0 auto
                                         height: 2em
@@ -208,11 +235,12 @@ slots:
                       height: 2em
                 - component: oh-repeater
                   config:
-                    for: menuArray
+                    fetchMetadata: metadata,semantics,widgetOrder
                     fragment: true
+                    for: menuArray
                     sourceType: itemsWithTags
-                    itemTags: Floor
-                    fetchMetadata: widgetOrder
+                    itemTags: ","
+                    filter: (loop.menuArray.metadata) && (loop.menuArray.metadata.semantics.value).includes("Floor")
                     map: loop.menuArray_source
                   slots:
                     default:
@@ -237,9 +265,11 @@ slots:
                                   - component: oh-button
                                     config:
                                       action: variable
-                                      actionVariable: floor
-                                      actionVariableValue: =loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split('&')[1]].name
-                                      class: '=(vars.floor ==(loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
+                                      actionVariable: objVar
+                                      actionVariableValue:
+                                        selectSection: = vars.objVar.selectSection
+                                        floor: =loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split('&')[1]].name
+                                      class: '=(vars.objVar.floor ==(loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
                                       style:
                                         flex: 0 0 auto
                                         height: 2em
@@ -281,12 +311,13 @@ slots:
                       height: 2em
                 - component: oh-repeater
                   config:
-                    for: menuArrayRoom
+                    fetchMetadata: metadata,semantics,widgetOrder
                     fragment: true
-                    sourceType: itemsWithTags
-                    itemTags: =vars.floor
-                    fetchMetadata: widgetOrder
+                    for: menuArrayRoom
+                    sourceType: itemsInGroup
+                    groupItem: =vars.objVar.floor
                     map: loop.menuArrayRoom_source
+                    filter: (loop.menuArrayRoom.metadata) && (loop.menuArrayRoom.metadata.semantics.value).includes("Room")
                   slots:
                     default:
                       - component: f7-row
@@ -310,9 +341,12 @@ slots:
                                   - component: oh-button
                                     config:
                                       action: variable
-                                      actionVariable: room
-                                      actionVariableValue: =loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split('&')[1]].name
-                                      class: '=(vars.room ==(loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
+                                      actionVariable: objVar
+                                      actionVariableValue:
+                                        selectSection: =vars.objVar.selectSection
+                                        floor: =vars.objVar.floor
+                                        room: =loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split('&')[1]].name
+                                      class: '=(vars.objVar.room ==(loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
                                       style:
                                         flex: 0 0 auto
                                         height: 2em
@@ -351,115 +385,77 @@ slots:
         default:
           - component: f7-segmented
             config:
-              class:
-                - segmented-strong
               style:
-                --f7-segmented-strong-between-buttons: 0px
-                --f7-segmented-strong-bg-color: transparent
-                --f7-segmented-strong-button-font-weight: 300
-                --f7-segmented-strong-button-hover-bg-color: rgba(255, 255, 255, 0.15)
-                --f7-segmented-strong-padding: 0px
+                display: flex
+                flex-direction: row
+                justify-content: space-around
             slots:
               default:
-                - component: oh-button
+                - component: oh-link
                   config:
+                    style:
+                      display: flex
+                      flex-direction: column
+                      padding-top: half
                     action: variable
                     actionVariable: objVar
                     actionVariableValue:
                       selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
                       selectThing: Security
-                    class:
-                      - padding-top-half
-                      - display-flex
-                      - flex-direction-column
-                    fill: '=vars.objVar.selectThing=="Security" ? true : false'
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Security")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
                     icon-f7: shield_fill
-                    iconColor: '=items[props.securityMode].state != "disarmed"  ? "red" : "gray"'
-                    iconSize: 20
-                    style:
-                      --f7-button-bg-color: transparent
-                      --f7-button-border-radius: 15px
-                      --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Security" ? "F8BB00" : "transparent"'
-                      --f7-button-padding-horizontal: 0px
-                      --f7-button-padding-vertical: 0px
-                      --f7-button-text-color: '=vars.objVar.selectThing=="Security" ? "black" : "white"'
-                      font-size: 12px
-                      height: auto
+                    iconBadge: 1
+                    badgeColor: '=(vars.objVar && (vars.objVar.selectThing=="Security")) ? "orange" : "red"'
                     text: Security
-                - component: oh-button
+                - component: oh-link
                   config:
+                    style:
+                      display: flex
+                      flex-direction: column
+                      padding-top: half
                     action: variable
                     actionVariable: objVar
                     actionVariableValue:
                       selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
                       selectThing: Scenes
-                    class:
-                      - padding-top-half
-                      - display-flex
-                      - flex-direction-column
-                    fill: '=vars.objVar.selectThing=="Scenes" ? true : false'
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Scenes")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
                     icon-f7: rectangle_on_rectangle_angled
-                    iconColor: '=vars.objVar.selectThing=="Scenes" ? "black" : "white"'
-                    iconSize: 20
-                    style:
-                      --f7-button-bg-color: transparent
-                      --f7-button-border-radius: 15px
-                      --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Scenes" ? "F8BB00" : "transparent"'
-                      --f7-button-padding-horizontal: 0px
-                      --f7-button-padding-vertical: 0px
-                      --f7-button-text-color: '=vars.objVar.selectThing=="Scenes" ? "black" : "white"'
-                      font-size: 12px
-                      height: auto
                     text: Scenes
-                - component: oh-button
+                - component: oh-link
                   config:
+                    style:
+                      display: flex
+                      flex-direction: column
+                      padding-top: half
                     action: variable
                     actionVariable: objVar
                     actionVariableValue:
                       selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
                       selectThing: Weather
-                    class:
-                      - padding-top-half
-                      - display-flex
-                      - flex-direction-column
-                    fill: '=vars.objVar.selectThing=="Weather" ? true : false'
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Weather")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
                     icon-f7: cloud
-                    iconColor: '=vars.objVar.selectThing=="Weather" ? "black" : "white"'
-                    iconSize: 20
-                    style:
-                      --f7-button-bg-color: transparent
-                      --f7-button-border-radius: 15px
-                      --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Weather" ? "F8BB00" : "transparent"'
-                      --f7-button-padding-horizontal: 0px
-                      --f7-button-padding-vertical: 0px
-                      --f7-button-text-color: '=vars.objVar.selectThing=="Weather" ? "black" : "white"'
-                      font-size: 12px
-                      height: auto
                     text: Weather
-                - component: oh-button
+                - component: oh-link
                   config:
+                    style:
+                      display: flex
+                      flex-direction: column
+                      padding-top: half
                     action: variable
                     actionVariable: objVar
                     actionVariableValue:
                       selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
                       selectThing: Energy
-                    class:
-                      - padding-top-half
-                      - display-flex
-                      - flex-direction-column
-                    fill: '=vars.objVar.selectThing=="Energy" ? true : false'
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Energy")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
                     icon-f7: bolt_fill
-                    iconColor: '=vars.objVar.selectThing=="Energy" ? "black" : "white"'
-                    iconSize: 20
-                    style:
-                      --f7-button-bg-color: transparent
-                      --f7-button-border-radius: 15px
-                      --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Energy" ? "F8BB00" : "transparent"'
-                      --f7-button-padding-horizontal: 0px
-                      --f7-button-padding-vertical: 0px
-                      --f7-button-text-color: '=vars.objVar.selectThing=="Energy" ? "black" : "white"'
-                      font-size: 12px
-                      height: auto
                     text: Energy
     - component: f7-block
       config:
@@ -474,113 +470,73 @@ slots:
         default:
           - component: f7-segmented
             config:
-              class:
-                - segmented-strong
               style:
-                --f7-segmented-strong-between-buttons: 0px
-                --f7-segmented-strong-bg-color: transparent
-                --f7-segmented-strong-button-font-weight: 300
-                --f7-segmented-strong-button-hover-bg-color: rgba(255, 255, 255, 0.15)
-                --f7-segmented-strong-padding: 0px
+                display: flex
+                flex-direction: row
+                justify-content: space-around
             slots:
               default:
-                - component: oh-button
+                - component: oh-link
                   config:
+                    style:
+                      display: flex
+                      flex-direction: column
+                      padding-top: half
                     action: variable
                     actionVariable: objVar
                     actionVariableValue:
                       selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
                       selectThing: Lights
-                    class:
-                      - padding-top-half
-                      - display-flex
-                      - flex-direction-column
-                    fill: '=vars.objVar.selectThing=="Lights" ? true : false'
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Lights")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
                     icon-f7: lightbulb_fill
-                    iconColor: '=vars.objVar.selectThing=="Lights" ? "black" : "white"'
-                    iconSize: 20
-                    style:
-                      --f7-button-bg-color: transparent
-                      --f7-button-border-radius: 15px
-                      --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Lights" ? "F8BB00" : "transparent"'
-                      --f7-button-padding-horizontal: 0px
-                      --f7-button-padding-vertical: 0px
-                      --f7-button-text-color: '=vars.objVar.selectThing=="Lights" ? "black" : "white"'
-                      font-size: 12px
-                      height: auto
                     text: Lights
-                - component: oh-button
+                - component: oh-link
                   config:
+                    style:
+                      display: flex
+                      flex-direction: column
+                      padding-top: half
                     action: variable
                     actionVariable: objVar
                     actionVariableValue:
                       selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
                       selectThing: Rollers
-                    class:
-                      - padding-top-half
-                      - display-flex
-                      - flex-direction-column
-                    fill: '=vars.objVar.selectThing=="Rollers" ? true : false'
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Rollers")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
                     icon-f7: archivebox
-                    iconColor: '=vars.objVar.selectThing=="Rollers" ? "black" : "white"'
-                    iconSize: 20
-                    style:
-                      --f7-button-bg-color: transparent
-                      --f7-button-border-radius: 15px
-                      --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Rollers" ? "F8BB00" : "transparent"'
-                      --f7-button-padding-horizontal: 0px
-                      --f7-button-padding-vertical: 0px
-                      --f7-button-text-color: '=vars.objVar.selectThing=="Rollers" ? "black" : "white"'
-                      font-size: 12px
-                      height: auto
                     text: Shades
-                - component: oh-button
+                - component: oh-link
                   config:
+                    style:
+                      display: flex
+                      flex-direction: column
+                      padding-top: half
                     action: variable
                     actionVariable: objVar
                     actionVariableValue:
                       selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
                       selectThing: Climate
-                    class:
-                      - padding-top-half
-                      - display-flex
-                      - flex-direction-column
-                    fill: '=vars.objVar.selectThing=="Climate" ? true : false'
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Climate")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
                     icon-f7: snow
-                    iconColor: '=vars.objVar.selectThing=="Climate" ? "black" : "white"'
-                    iconSize: 20
-                    style:
-                      --f7-button-bg-color: transparent
-                      --f7-button-border-radius: 15px
-                      --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Climate" ? "F8BB00" : "transparent"'
-                      --f7-button-padding-horizontal: 0px
-                      --f7-button-padding-vertical: 0px
-                      --f7-button-text-color: '=vars.objVar.selectThing=="Climate" ? "black" : "white"'
-                      font-size: 12px
-                      height: auto
                     text: Climate
-                - component: oh-button
+                - component: oh-link
                   config:
+                    style:
+                      display: flex
+                      flex-direction: column
+                      padding-top: half
                     action: variable
                     actionVariable: objVar
                     actionVariableValue:
                       selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
                       selectThing: Appliances
-                    class:
-                      - padding-top-half
-                      - display-flex
-                      - flex-direction-column
-                    fill: '=vars.objVar.selectThing=="Appliances" ? true : false'
                     iconMaterial: power
-                    iconColor: '=vars.objVar.selectThing=="Appliances" ? "black" : "white"'
-                    iconSize: 20
-                    style:
-                      --f7-button-bg-color: transparent
-                      --f7-button-border-radius: 15px
-                      --f7-button-hover-bg-color: '=vars.objVar.selectThing=="Appliances" ? "F8BB00" : "transparent"'
-                      --f7-button-padding-horizontal: 0px
-                      --f7-button-padding-vertical: 0px
-                      --f7-button-text-color: '=vars.objVar.selectThing=="Appliances" ? "black" : "white"'
-                      font-size: 12px
-                      height: auto
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Appliances")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
                     text: Appliances
