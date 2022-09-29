@@ -14,7 +14,7 @@ props:
       required: false
       type: TEXT
   parameterGroups: []
-timestamp: Sep 25, 2022, 11:33:57 AM
+timestamp: Sep 29, 2022, 12:09:43 PM
 component: f7-block
 config:
   style:
@@ -27,7 +27,7 @@ slots:
     - component: oh-repeater
       config:
         fetchMetadata: semantics,metadata,listWidget
-        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.room
+        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.objVar.room
         for: equipmentItem
         itemTags: Blinds
         sourceType: itemsWithTags
@@ -50,7 +50,7 @@ slots:
     - component: oh-repeater
       config:
         fetchMetadata: semantics,metadata,listWidget
-        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.room
+        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.objVar.room
         for: equipmentItem
         itemTags: Lightbulb
         sourceType: itemsWithTags
@@ -63,7 +63,7 @@ slots:
     - component: oh-repeater
       config:
         fetchMetadata: semantics,metadata,listWidget
-        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.room
+        filter: loop.equipmentItem.metadata.semantics.config.hasLocation == vars.objVar.room
         for: equipmentItem
         itemTags: RadiatorControl
         sourceType: itemsWithTags
