@@ -8,7 +8,95 @@ props:
       required: false
       type: TEXT
     - context: item
+      descuid: main_widget_Floor_Card
+tags: []
+props:
+  parameters:
+    - description: A text prop
+      label: Prop 1
+      name: prop1
+      required: false
+      type: TEXT
+    - context: item
       description: An item to control
+      label: Item
+      name: item
+      required: false
+      type: TEXT
+  parameterGroups: []
+timestamp: Sep 29, 2022, 12:02:28 PM
+component: f7-block
+config:
+  visible: '=vars.objVar ? (vars.objVar.selectSection=="SECTION2" && !(vars.objVar.room)) ? true : false : false'
+  style:
+    flex: 1 1 auto
+    overflow: scroll
+    margin-top: 1em
+    margin-bottom: -1em
+slots:
+  default:
+    - component: oh-repeater
+      config:
+        fetchMetadata: semantics,metadata,widgetOrder
+        for: roomItem
+        sourceType: itemsInGroup
+        groupItem: =vars.objVar.floor
+        filter: (loop.roomItem.metadata) && (loop.roomItem.metadata.semantics.value).includes("Room")
+      slots:
+        default:
+          - component: f7-block
+            config:
+              flex-direction: row
+              margin-left: 2.5rem
+            slots:
+              default:
+                - component: Label
+                  config:
+                    text: =loop.roomItem.label
+                    style:
+                      font-size: 20px
+                      font-weight: 600
+                      margin-left: 35px
+                      margin-top: 0px
+                      line-height: 1.1
+                - component: Label
+                  config:
+                    text: =loop.roomItem.name
+                    style:
+                      color: var(--f7-list-item-footer-text-color)
+                      font-size: 18px
+                      font-weight: 400
+                      margin-left: 35px
+                      margin-top: 0px
+                      line-height: 1.2
+          - component: oh-repeater
+            config:
+              fetchMetadata: semantics,metadata,listWidget
+              fragment: true
+              for: equipmentItem
+              itemTags: Lightbulb
+              sourceType: itemsWithTags
+              filter: loop.equipmentItem.metadata.semantics.config.hasLocation == loop.roomItem.name
+            slots:
+              default:
+                - component: widget:main_widget_Light_Card
+                  config:
+                    equipmentItem: =loop.equipmentItem.name
+          - component: oh-repeater
+            config:
+              fetchMetadata: semantics,metadata,listWidget
+              fragment: true
+              for: shutterItem
+              itemTags: Blinds
+              sourceType: itemsWithTags
+              filter: loop.shutterItem.metadata.semantics.config.hasLocation == loop.roomItem.name
+            slots:
+              default:
+                - component: widget:main_widget_Rollershutter_Card
+                  config:
+                    RollerItem: =loop.shutterItem.name
+                    RollerTitle: =loop.shutterItem.label
+ription: An item to control
       label: Item
       name: item
       required: false
