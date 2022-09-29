@@ -8,23 +8,13 @@ props:
       required: false
       type: TEXT
     - context: item
-      descuid: main_widget_Floor_Card
-tags: []
-props:
-  parameters:
-    - description: A text prop
-      label: Prop 1
-      name: prop1
-      required: false
-      type: TEXT
-    - context: item
       description: An item to control
       label: Item
       name: item
       required: false
       type: TEXT
   parameterGroups: []
-timestamp: Sep 29, 2022, 12:02:28 PM
+timestamp: Sep 29, 2022, 1:52:56 PM
 component: f7-block
 config:
   visible: '=vars.objVar ? (vars.objVar.selectSection=="SECTION2" && !(vars.objVar.room)) ? true : false : false'
@@ -81,6 +71,7 @@ slots:
               default:
                 - component: widget:main_widget_Light_Card
                   config:
+                    visible: '=vars.objVar ? (vars.objVar.selectSection=="SECTION2" && !(vars.objVar.room)) ? true : false : false'
                     equipmentItem: =loop.equipmentItem.name
           - component: oh-repeater
             config:
@@ -94,25 +85,6 @@ slots:
               default:
                 - component: widget:main_widget_Rollershutter_Card
                   config:
+                    visible: '=vars.objVar ? (vars.objVar.selectSection=="SECTION2" && !(vars.objVar.room)) ? true : false : false'
                     RollerItem: =loop.shutterItem.name
                     RollerTitle: =loop.shutterItem.label
-ription: An item to control
-      label: Item
-      name: item
-      required: false
-      type: TEXT
-  parameterGroups: []
-timestamp: Sep 25, 2022, 12:20:29 AM
-component: f7-block
-config:
-  style:
-    flex: 1 1 auto
-    overflow: scroll
-    margin-top: -1em
-    margin-bottom: -1em
-slots:
-  default:
-    - component: oh-label-card
-      config:
-        title: This is a dummy card only to be shown on Floor Level
-        visible: '= vars.objVar && vars.objVar.selectSection=="SECTION1" ? true : false'
