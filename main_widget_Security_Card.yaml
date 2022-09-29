@@ -3,7 +3,6 @@ tags: []
 props:
   parameters:
     - context: item
-      default: gSecurity
       description: Security Group Item
       label: Security Group
       name: securityGroup
