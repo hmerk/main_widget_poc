@@ -2,14 +2,8 @@ uid: main_widget_Security_Card
 tags: []
 props:
   parameters:
-    - default: Contacts & Alarm
-      description: Title of the card
-      label: Title
-      name: Title
-      required: true
-      type: TEXT
-      advanced: false
     - context: item
+      default: gSecurity
       description: Security Group Item
       label: Security Group
       name: securityGroup
@@ -27,7 +21,7 @@ props:
       name: referencePIN
       required: false
       type: TEXT
-timestamp: Sep 25, 2022, 2:53:46 AM
+timestamp: Sep 27, 2022, 3:46:56 PM
 component: f7-card
 config:
   style:
@@ -39,32 +33,6 @@ config:
     margin-right: 5px
 slots:
   default:
-    - component: f7-card-header
-      config:
-        style:
-          height: auto
-      slots:
-        default:
-          - component: oh-icon
-            config:
-              icon: iconify:bi:shield-fill-check
-              height: 25px
-              style:
-                color: green
-          - component: f7-block
-            config:
-              style:
-                position: absolute
-                left: 50px
-            slots:
-              default:
-                - component: Label
-                  config:
-                    text: =props.Title
-                    style:
-                      margin-top: 3px
-                      fontSize: 15px
-                      font-weight: 600
     - component: f7-card-content
       config:
         style:
@@ -170,149 +138,275 @@ slots:
                             font-size: 14px
                             height: auto
                           text: ARMED AWAY
-          - component: f7-row
+          - component: f7-list
             config:
-              style:
-                justify-content: space-between
-                margin-top: 20px
+              noHairlinesBetween: true
+              accordionList: true
             slots:
               default:
-                - component: Label
+                - component: f7-list-item
                   config:
-                    text: Door & Window Contacts
+                    accordionItem: true
                     style:
-                      margin-top: 3px
+                      margin-top: 15px
                       fontSize: 15px
-                      font-weight: 500
-          - component: oh-repeater
-            config:
-              fetchMetadata: semantics,widgetOrder,uiSemantics
-              fragment: true
-              for: securityGroupMember
-              sourceType: itemsInGroup
-              groupItem: =props.securityGroup
-              filter: '(loop.securityGroupMember.type=="Contact") ? true : false'
-            slots:
-              default:
-                - component: f7-row
-                  config:
-                    style:
-                      justify-content: space-between
-                      margin-top: 5px
+                      font-weight: bold
+                    title: Door Sensors
                   slots:
-                    default:
-                      - component: Label
-                        config:
-                          text: =loop.securityGroupMember.label
-                          style:
-                            margin-top: 3px
-                            fontSize: 15px
-                            font-weight: 400
+                    inner-end:
                       - component: f7-chip
                         config:
-                          style:
-                            height: 17px
-                            fontSize: 15px
-                          text: '=loop.securityGroupMember.state != "CLOSED" ? " OPEN " : "CLOSED"'
-                          textColor: white
-                          color: '=loop.securityGroupMember.state != "CLOSED" ? "red" : "green"'
-          - component: f7-row
-            config:
-              style:
-                justify-content: space-between
-                margin-top: 10px
-            slots:
-              default:
-                - component: Label
-                  config:
-                    text: Motion
-                    style:
-                      margin-top: 3px
-                      fontSize: 15px
-                      font-weight: 500
-          - component: oh-repeater
-            config:
-              fetchMetadata: semantics,widgetOrder,uiSemantics
-              fragment: true
-              for: securityGroupMember
-              sourceType: itemsInGroup
-              groupItem: =props.securityGroup
-              filter: '(loop.securityGroupMember.category=="motion") ? true : false'
-            slots:
-              default:
-                - component: f7-row
-                  config:
-                    style:
-                      justify-content: space-between
-                      margin-top: 5px
-                  slots:
+                          bgColor: transparent
+                          iconMaterial: sensor_door
+                          iconColor: '=loop.doorMember.state != "CLOSED" ? "red" : "gray"'
+                          iconSize: 20px
                     default:
-                      - component: Label
+                      - component: f7-accordion-content
                         config:
-                          text: =loop.securityGroupMember.label
-                          style:
-                            margin-top: 3px
-                            fontSize: 15px
-                            font-weight: 400
+                          noHairlinesBetween: true
+                          accordionList: true
+                        slots:
+                          default:
+                            - component: oh-repeater
+                              config:
+                                accordionList: true
+                                fetchMetadata: semantics,widgetOrder,uiSemantics
+                                fragment: true
+                                for: securityGroupMember
+                                sourceType: itemsWithTags
+                                itemTags: Door
+                              slots:
+                                default:
+                                  - component: oh-list
+                                    config:
+                                      noHairlinesBetween: true
+                                    slots:
+                                      default:
+                                        - component: oh-repeater
+                                          config:
+                                            fetchMetadata: semantics
+                                            fragment: true
+                                            for: doorMember
+                                            sourceType: itemsInGroup
+                                            groupItem: =loop.securityGroupMember.name
+                                          slots:
+                                            default:
+                                              - component: f7-list-item
+                                                config:
+                                                  style:
+                                                    margin-top: -7px
+                                                    fontSize: 14px
+                                                    font-weight: 800
+                                                  title: =loop.doorMember.label
+                                                slots:
+                                                  default:
+                                                    - component: f7-chip
+                                                      config:
+                                                        bgColor: transparent
+                                                        iconMaterial: sensor_door
+                                                        iconColor: '=loop.doorMember.state != "CLOSED" ? "red" : "gray"'
+                                                        iconSize: 20px
+          - component: f7-list
+            config:
+              noHairlinesBetween: true
+              accordionList: true
+            slots:
+              default:
+                - component: f7-list-item
+                  config:
+                    accordionItem: true
+                    style:
+                      margin-top: 15px
+                      fontSize: 15px
+                      font-weight: bold
+                    title: Window Sensors
+                  slots:
+                    inner-end:
                       - component: f7-chip
                         config:
-                          style:
-                            height: 17px
-                            fontSize: 15px
-                          text: '=loop.securityGroupMember.state != "OFF" ? "MOTION" : " QUIET "'
-                          textColor: white
-                          color: '=loop.securityGroupMember.state != "OFF" ? "red" : "green"'
-          - component: f7-row
-            config:
-              style:
-                justify-content: space-between
-                margin-top: 10px
-            slots:
-              default:
-                - component: Label
-                  config:
-                    text: Surveillance
-                    style:
-                      margin-top: 3px
-                      fontSize: 15px
-                      font-weight: 500
-          - component: oh-repeater
-            config:
-              fetchMetadata: semantics,widgetOrder,uiSemantics
-              fragment: true
-              for: securityGroupMember
-              sourceType: itemsInGroup
-              groupItem: =props.securityGroup
-              filter: '(loop.securityGroupMember.category=="camera") ? true : false'
-            slots:
-              default:
-                - component: f7-row
-                  config:
-                    style:
-                      justify-content: space-between
-                      margin-top: 5px
-                  slots:
+                          bgColor: transparent
+                          iconMaterial: sensor_window
+                          iconColor: '=loop.cameraMember.state != "CLOSED" ? "red" : "gray"'
+                          iconSize: 20px
                     default:
-                      - component: Label
+                      - component: f7-accordion-content
                         config:
-                          text: =loop.securityGroupMember.label
-                          margin-top: 3px
-                          fontSize: 15px
-                          font-weight: 400
+                          noHairlinesBetween: true
+                          accordionList: true
+                        slots:
+                          default:
+                            - component: oh-repeater
+                              config:
+                                accordionList: true
+                                fetchMetadata: semantics,widgetOrder,uiSemantics
+                                fragment: true
+                                for: securityGroupMember
+                                sourceType: itemsWithTags
+                                itemTags: Window
+                              slots:
+                                default:
+                                  - component: oh-list
+                                    config:
+                                      noHairlinesBetween: true
+                                    slots:
+                                      default:
+                                        - component: oh-repeater
+                                          config:
+                                            fetchMetadata: semantics
+                                            fragment: true
+                                            for: windowMember
+                                            sourceType: itemsInGroup
+                                            groupItem: =loop.securityGroupMember.name
+                                          slots:
+                                            default:
+                                              - component: f7-list-item
+                                                config:
+                                                  style:
+                                                    margin-top: -7px
+                                                    fontSize: 14px
+                                                    font-weight: 800
+                                                  title: =loop.windowMember.label
+                                                slots:
+                                                  default:
+                                                    - component: f7-chip
+                                                      config:
+                                                        bgColor: transparent
+                                                        iconMaterial: sensor_window
+                                                        iconColor: '=loop.windowMember.state != "CLOSED" ? "red" : "gray"'
+                                                        iconSize: 20px
+          - component: f7-list
+            config:
+              noHairlinesBetween: true
+              accordionList: true
+            slots:
+              default:
+                - component: f7-list-item
+                  config:
+                    accordionItem: true
+                    style:
+                      margin-top: 15px
+                      fontSize: 15px
+                      font-weight: bold
+                    title: Motion Sensors
+                  slots:
+                    inner-end:
                       - component: f7-chip
                         config:
-                          style:
-                            height: 17px
-                            fontSize: 15px
-                          text: '=loop.securityGroupMember.state != "OFF" ? "  ON  " : "  OFF  "'
-                          textColor: white
-                          color: '=loop.securityGroupMember.state != "OFF" ? "green" : "red"'
-    - component: f7-card-footer
-      config:
-        style:
-          height: auto
-      slots:
-        default:
-          - component: Label
+                          bgColor: transparent
+                          iconMaterial: sensors
+                          iconColor: '=loop.motionMember.state != "OFF" ? "red" : "gray"'
+                          iconSize: 20px
+                    default:
+                      - component: f7-accordion-content
+                        config:
+                          noHairlinesBetween: true
+                          accordionList: true
+                        slots:
+                          default:
+                            - component: oh-repeater
+                              config:
+                                accordionList: true
+                                fetchMetadata: semantics,widgetOrder,uiSemantics
+                                fragment: true
+                                for: securityGroupMember
+                                sourceType: itemsWithTags
+                                itemTags: MotionDetector
+                              slots:
+                                default:
+                                  - component: oh-list
+                                    config:
+                                      noHairlinesBetween: true
+                                    slots:
+                                      default:
+                                        - component: oh-repeater
+                                          config:
+                                            fetchMetadata: semantics
+                                            fragment: true
+                                            for: motionMember
+                                            sourceType: itemsInGroup
+                                            groupItem: =loop.securityGroupMember.name
+                                          slots:
+                                            default:
+                                              - component: f7-list-item
+                                                config:
+                                                  style:
+                                                    margin-top: -7px
+                                                    fontSize: 14px
+                                                    font-weight: 800
+                                                  title: =loop.motionMember.label
+                                                slots:
+                                                  default:
+                                                    - component: f7-chip
+                                                      config:
+                                                        bgColor: transparent
+                                                        iconMaterial: sensors
+                                                        iconColor: '=loop.motionMember.state != "OFF" ? "red" : "gray"'
+                                                        iconSize: 20px
+          - component: f7-list
             config:
-              text: '=items[props.Item1].state != "ON" && items[props.Item2].state != "ON" && items[props.Item3].state != "ON" && items[props.Item4].state != "ON" && items[props.Item5].state != "ON" && items[props.Item6].state != "ON" && items[props.Item7].state != "ON" && items[props.Item8].state != "ON" && items[props.Item9].state != "ON" && items[props.Item10].state != "ON" ? "Everything OFF. System ARMED." : "One or more items ON. System NOT ARMED."'
+              noHairlinesBetween: true
+              accordionList: true
+            slots:
+              default:
+                - component: f7-list-item
+                  config:
+                    accordionItem: true
+                    style:
+                      margin-top: 15px
+                      fontSize: 15px
+                      font-weight: bold
+                    title: Surveillance
+                  slots:
+                    inner-end:
+                      - component: f7-chip
+                        config:
+                          bgColor: transparent
+                          iconMaterial: video_camera_front
+                          iconColor: '=loop.cameraMember.state != "CLOSED" ? "red" : "gray"'
+                          iconSize: 20px
+                    default:
+                      - component: f7-accordion-content
+                        config:
+                          noHairlinesBetween: true
+                          accordionList: true
+                        slots:
+                          default:
+                            - component: oh-repeater
+                              config:
+                                accordionList: true
+                                fetchMetadata: semantics,widgetOrder,uiSemantics
+                                fragment: true
+                                for: securityGroupMember
+                                sourceType: itemsWithTags
+                                itemTags: Camera
+                              slots:
+                                default:
+                                  - component: oh-list
+                                    config:
+                                      noHairlinesBetween: true
+                                    slots:
+                                      default:
+                                        - component: oh-repeater
+                                          config:
+                                            fetchMetadata: semantics
+                                            fragment: true
+                                            for: cameraMember
+                                            sourceType: itemsInGroup
+                                            groupItem: =loop.securityGroupMember.name
+                                          slots:
+                                            default:
+                                              - component: f7-list-item
+                                                config:
+                                                  style:
+                                                    margin-top: -7px
+                                                    fontSize: 14px
+                                                    font-weight: 800
+                                                  title: =loop.cameraMember.label
+                                                slots:
+                                                  default:
+                                                    - component: f7-chip
+                                                      config:
+                                                        bgColor: transparent
+                                                        iconMaterial: video_camera_front
+                                                        iconColor: '=loop.cameraMember.state != "OFF" ? "red" : "gray"'
+                                                        iconSize: 20px
