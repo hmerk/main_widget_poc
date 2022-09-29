@@ -14,13 +14,13 @@ props:
       required: false
       type: TEXT
   parameterGroups: []
-timestamp: Sep 25, 2022, 12:07:05 AM
+timestamp: Sep 25, 2022, 11:33:57 AM
 component: f7-block
 config:
   style:
     flex: 1 1 auto
     overflow: scroll
-    margin-top: -1em
+    margin-top: 1em
     margin-bottom: -1em
 slots:
   default:
@@ -85,11 +85,3 @@ slots:
                       position: relative
                     visible: '=vars.objVar.selectThing=="Climate" ? true : false'
                     widgettrend: =loop.tempItem.name
-    - component: Label
-      config:
-        style:
-          flex: 1 1 auto
-          overflow-y: auto
-          position: relative
-        text: =vars.objVar.selectSection + vars.floor
-        visible: "=vars.objVar ? true : false"
