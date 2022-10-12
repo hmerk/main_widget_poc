@@ -1,0 +1,611 @@
+uid: main_widget
+tags: []
+props:
+  parameters:
+    - description: Set default color for Text
+      label: Text color
+      name: textColor
+      required: false
+      type: TEXT
+    - default: RGB(96, 96, 96)
+      description: Set default color for Text
+      label: Bottom-Navbar-Color
+      name: bnavColor
+      required: false
+      type: TEXT
+    - default: Somewhere
+      description: Name for your weather location
+      label: Weather Location
+      name: locationTitle
+      required: false
+      type: TEXT
+    - context: item
+      description: Name of scenes group item
+      label: Scenes Group
+      name: scenesGroup
+      required: false
+      type: TEXT
+    - description: Hide Security menu
+      label: hide
+      name: hideSecurity
+      required: false
+      type: BOOLEAN
+      groupName: security
+    - description: Hide Central Heating menu
+      label: hide
+      name: hideCentralHeating
+      required: false
+      type: BOOLEAN
+      groupName: centralHeating
+  parameterGroups:
+    - name: security
+      label: Security Configuration Parameters
+    - name: centralHeating
+      label: Central Heating Configuration Parameters
+timestamp: Oct 12, 2022, 7:58:41 AM
+component: f7-block
+config:
+  style:
+    display: flex
+    flex-direction: column
+    height: calc(100vh - var(--f7-toolbar-height) - var(--f7-safe-area-bottom) - var(--f7-safe-area-top))
+    justify-content: space-between
+    margin: 0
+    padding: 0
+    width: 100%
+    background: =(themeOptions.dark=="light") ? ("white"):("black")
+    --menu-text-color: '= (!props.textColor) ? (themeOptions.dark=="light")? black : white : props.textColor'
+    --f7-button-text-color: "#8c8c8c"
+    --opmw-menu-text-color: =(themeOptions.dark=="light")?("#8C8C8C"):("#848484")
+  stylesheet: >
+    .selected_menu_item {
+      color: var(--menu-text-color);
+      text-decoration-color: #F8BB00 !important;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-weight: bold;
+    } 
+
+    .unselected_menu_item {
+      color: #8C8C8C;
+      font-weight: 300;
+    }
+
+    .selected_bottom_navbar_item {
+     color: white;
+     
+     font-size: 12px;
+     height: auto;
+     --f7-button-bg-color: transparent;  
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     padding-top: 1%;
+     padding-bottom: 1%;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+
+    }  
+
+    .unselected_bottom_navbar_item {
+     
+     color: #8c8c8c;
+     font-size: 12px;
+     height: auto;
+     --f7-button-bg-color: transparent 
+          display: flex;
+     flex-direction: column;
+     padding-top: 2%;
+     padding-bottom: 2%;
+    } 
+slots:
+  default:
+    - component: f7-block
+      config:
+        style:
+          flex: 0 0 auto
+          overflow: scroll
+      slots:
+        default:
+          - component: f7-segmented
+            config:
+              style:
+                flex: 1 1 auto
+                justify-content: center
+                margin-left: 2%
+                margin-right: 2%
+                gap: 10px
+            slots:
+              default:
+                - component: oh-repeater
+                  config:
+                    for: baseMenu
+                    fragment: true
+                    in:
+                      - name: Home
+                      - name: Floors
+                      - name: Rooms
+                    map: loop.baseMenu.name
+                    sourceType: array
+                  slots:
+                    default:
+                      - component: oh-button
+                        config:
+                          action: variable
+                          actionVariable: objVar
+                          actionVariableValue:
+                            selectSection: ="SECTION" + loop.baseMenu_idx
+                          large: true
+                          class: '=vars.objVar.selectSection=="SECTION" + loop.baseMenu_idx ? "selected_menu_item" : "unselected_menu_item"'
+                          style:
+                            font-size: 24px
+                            font-weight: 200
+                            flex: 0 1 auto
+                            width: auto
+                          text: =loop.baseMenu
+          - component: f7-row
+            config:
+              style:
+                align-items: center
+                display: flex
+                flex-direction: row
+                flex-wrap: nowrap
+                height: 2em
+                justify-content: space-between
+                width: 100%
+              visible: false
+            slots:
+              default:
+                - component: oh-button
+                  config:
+                    action: variable
+                    actionVariable: buttonIndexHome
+                    actionVariableValue: =(vars.buttonIndexHome || 0) + 1
+                    iconF7: chevron_left
+                    style:
+                      color: "#F8BB00"
+                      flex: 0 0 auto
+                      height: 2em
+                - component: oh-repeater
+                  config:
+                    fetchMetadata: metadata,semantics,widgetOrder
+                    fragment: true
+                    for: menuArray
+                    sourceType: itemsWithTags
+                    itemTags: ","
+                    filter: (loop.menuArray.metadata) && (loop.menuArray.metadata.semantics.value).includes("Floor")
+                    map: loop.menuArray_source
+                  slots:
+                    default:
+                      - component: f7-row
+                        config:
+                          style:
+                            display: flex
+                            height: 2em
+                            justify-content: center
+                            overflow: hidden
+                        slots:
+                          default:
+                            - component: oh-repeater
+                              config:
+                                for: menuButtonHome
+                                fragment: true
+                                in: =loop.menuArray
+                                filter: loop.menuArray_idx == 0
+                                map: ((loop.menuButtonHome.metadata && loop.menuButtonHome.metadata.widgetOrder && loop.menuButtonHome.metadata.widgetOrder.value) || 0).toString().padStart(3,'0') + '&' + loop.menuButtonHome_idx
+                              slots:
+                                default:
+                                  - component: oh-button
+                                    config:
+                                      action: variable
+                                      actionVariable: objVar
+                                      actionVariableValue:
+                                        selectSection: = vars.objVar.selectSection
+                                        floor: =loop.menuArray[loop.menuButtonHome_source.sort()[loop.menuButtonHome_idx].split('&')[1]].name
+                                      style:
+                                        flex: 0 0 auto
+                                        height: 2em
+                                        order: =(((vars.buttonIndexHome || 0) % loop.menuButtonHome_source.length) + loop.menuButtonHome_source.length + loop.menuButtonHome_idx) % loop.menuButtonHome_source.length
+                                      text: =loop.menuArray[loop.menuButtonHome_source.sort()[loop.menuButtonHome_idx].split('&')[1]].label
+                - component: oh-button
+                  config:
+                    action: variable
+                    actionVariable: buttonIndexHome
+                    actionVariableValue: =(vars.buttonIndexHome || 0) - 1
+                    iconF7: chevron_right
+                    style:
+                      color: "#F8BB00"
+                      flex: 0 0 auto
+                      height: 2em
+          - component: f7-row
+            config:
+              style:
+                align-items: center
+                display: flex
+                flex-direction: row
+                flex-wrap: nowrap
+                height: 2em
+                justify-content: center
+                width: 100%
+              visible: '=vars.objVar ? (vars.objVar.selectSection=="SECTION1") ? true : false : false'
+            slots:
+              default:
+                - component: oh-button
+                  config:
+                    action: variable
+                    actionVariable: buttonIndexFloor
+                    actionVariableValue: =(vars.buttonIndexFloor || 0) + 1
+                    iconF7: chevron_left
+                    style:
+                      color: "#F8BB00"
+                      flex: 0 0 auto
+                      height: 2em
+                - component: oh-repeater
+                  config:
+                    fetchMetadata: metadata,semantics,widgetOrder
+                    fragment: true
+                    for: menuArray
+                    sourceType: itemsWithTags
+                    itemTags: ","
+                    filter: (loop.menuArray.metadata) && (loop.menuArray.metadata.semantics.value).includes("Floor")
+                    map: loop.menuArray_source
+                  slots:
+                    default:
+                      - component: f7-row
+                        config:
+                          style:
+                            display: flex
+                            height: 2em
+                            justify-content: center
+                            overflow: hidden
+                        slots:
+                          default:
+                            - component: oh-repeater
+                              config:
+                                for: menuButtonFloor
+                                fragment: true
+                                in: =loop.menuArray
+                                filter: loop.menuArray_idx == 0
+                                map: ((loop.menuButtonFloor.metadata && loop.menuButtonFloor.metadata.widgetOrder && loop.menuButtonFloor.metadata.widgetOrder.value) || 0).toString().padStart(3,'0') + '&' + loop.menuButtonFloor_idx
+                              slots:
+                                default:
+                                  - component: oh-button
+                                    config:
+                                      action: variable
+                                      actionVariable: objVar
+                                      actionVariableValue:
+                                        selectSection: SECTION2
+                                        floor: =loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split('&')[1]].name
+                                      class: '=(vars.objVar.floor ==(loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
+                                      style:
+                                        flex: 0 0 auto
+                                        height: 2em
+                                        order: =(((vars.buttonIndexFloor || 0) % loop.menuButtonFloor_source.length) + loop.menuButtonFloor_source.length + loop.menuButtonFloor_idx) % loop.menuButtonFloor_source.length
+                                        text-underline-offset: 4px
+                                      text: =loop.menuArray[loop.menuButtonFloor_source.sort()[loop.menuButtonFloor_idx].split('&')[1]].label
+                - component: oh-button
+                  config:
+                    action: variable
+                    actionVariable: buttonIndexFloor
+                    actionVariableValue: =(vars.buttonIndexFloor || 0) - 1
+                    iconF7: chevron_right
+                    style:
+                      color: "#F8BB00"
+                      flex: 0 0 auto
+                      height: 2em
+          - component: f7-row
+            config:
+              style:
+                align-items: center
+                display: flex
+                flex-direction: row
+                flex-wrap: nowrap
+                height: 2em
+                justify-content: center
+                width: 100%
+              visible: '=vars.objVar ? (vars.objVar.selectSection=="SECTION2") ? true : false : false'
+            slots:
+              default:
+                - component: oh-button
+                  config:
+                    action: variable
+                    actionVariable: buttonIndexRoom
+                    actionVariableValue: =(vars.buttonIndexRoom || 0) + 1
+                    iconF7: chevron_left
+                    style:
+                      color: "#F8BB00"
+                      flex: 0 0 auto
+                      height: 2em
+                - component: oh-repeater
+                  config:
+                    fetchMetadata: metadata,semantics,widgetOrder
+                    fragment: true
+                    for: menuArrayRoom
+                    sourceType: itemsInGroup
+                    groupItem: =vars.objVar.floor
+                    map: loop.menuArrayRoom_source
+                    filter: (loop.menuArrayRoom.metadata) && (loop.menuArrayRoom.metadata.semantics.value).includes("Room")
+                    visible: "=!vars.objVar ? false : (vars.objVar.selectSection==SECTION1) ? false : true"
+                  slots:
+                    default:
+                      - component: f7-row
+                        config:
+                          style:
+                            display: flex
+                            height: 2em
+                            justify-content: center
+                            overflow: hidden
+                        slots:
+                          default:
+                            - component: oh-repeater
+                              config:
+                                for: menuButtonRoom
+                                fragment: true
+                                in: =loop.menuArrayRoom
+                                filter: loop.menuArrayRoom_idx == 0
+                                map: ((loop.menuButtonRoom.metadata && loop.menuButtonRoom.metadata.widgetOrder && loop.menuButtonRoom.metadata.widgetOrder.value) || 0).toString().padStart(3,'0') + '&' + loop.menuButtonRoom_idx
+                              slots:
+                                default:
+                                  - component: oh-button
+                                    config:
+                                      action: variable
+                                      actionVariable: objVar
+                                      actionVariableValue:
+                                        selectSection: =vars.objVar.selectSection
+                                        floor: =vars.objVar.floor
+                                        room: =loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split('&')[1]].name
+                                      class: '=(vars.objVar.room ==(loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
+                                      style:
+                                        flex: 0 0 auto
+                                        height: 2em
+                                        order: =(((vars.buttonIndexRoom || 0) % loop.menuButtonRoom_source.length) + loop.menuButtonRoom_source.length + loop.menuButtonRoom_idx) % loop.menuButtonRoom_source.length
+                                        text-underline-offset: 4px
+                                      text: =loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split('&')[1]].label
+                - component: oh-repeater
+                  config:
+                    fetchMetadata: metadata,semantics,widgetOrder
+                    fragment: true
+                    for: menuArrayRoom
+                    sourceType: itemsWithTags
+                    itemTags: ","
+                    map: loop.menuArrayRoom_source
+                    filter: (loop.menuArrayRoom.metadata) && (loop.menuArrayRoom.metadata.semantics.value).includes("Room") && (loop.menuArrayRoom.metadata.semantics.config.hasLocation == vars.objVar.floor)
+                    visible: "=!vars.objVar ? false : (vars.objVar.selectSection==SECTION1) ? false : true"
+                  slots:
+                    default:
+                      - component: f7-row
+                        config:
+                          style:
+                            display: flex
+                            height: 2em
+                            justify-content: center
+                            overflow: hidden
+                        slots:
+                          default:
+                            - component: oh-repeater
+                              config:
+                                for: menuButtonRoom
+                                fragment: true
+                                in: =loop.menuArrayRoom
+                                filter: loop.menuArrayRoom_idx == 0
+                                map: ((loop.menuButtonRoom.metadata && loop.menuButtonRoom.metadata.widgetOrder && loop.menuButtonRoom.metadata.widgetOrder.value) || 0).toString().padStart(3,'0') + '&' + loop.menuButtonRoom_idx
+                              slots:
+                                default:
+                                  - component: oh-button
+                                    config:
+                                      action: variable
+                                      actionVariable: objVar
+                                      actionVariableValue:
+                                        selectSection: =vars.objVar.selectSection
+                                        floor: =vars.objVar.floor
+                                        room: =loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split('&')[1]].name
+                                      class: '=(vars.objVar.room ==(loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split("&")[1]].name)) ? "selected_menu_item" : "unselected_menu_item"'
+                                      style:
+                                        flex: 0 0 auto
+                                        height: 2em
+                                        order: =(((vars.buttonIndexRoom || 0) % loop.menuButtonRoom_source.length) + loop.menuButtonRoom_source.length + loop.menuButtonRoom_idx) % loop.menuButtonRoom_source.length
+                                        text-underline-offset: 4px
+                                      text: =loop.menuArrayRoom[loop.menuButtonRoom_source.sort()[loop.menuButtonRoom_idx].split('&')[1]].label
+                - component: oh-button
+                  config:
+                    action: variable
+                    actionVariable: buttonIndexRoom
+                    actionVariableValue: =(vars.buttonIndexRoom || 0) - 1
+                    iconF7: chevron_right
+                    style:
+                      color: "#F8BB00"
+                      flex: 0 0 auto
+                      height: 2em
+          - component: f7-row
+            config:
+              style:
+                align-items: center
+                display: flex
+                flex-direction: row
+                flex-wrap: nowrap
+                height: 2em
+                justify-content: center
+                width: 100%
+              visible: "=!vars.objVar ? false : !vars.objVar.floor ? false : true"
+            slots:
+              default:
+                - component: oh-repeater
+                  config:
+                    fetchMetadata: semantics,metadata,widgetOrder
+                    for: floorItem
+                    sourceType: itemsWithTags
+                    itemTags: ","
+                    filter: loop.floorItem.name==vars.objVar.floor
+                  slots:
+                    default:
+                      - component: f7-chip
+                        config:
+                          text: =loop.floorItem.label
+                          style:
+                            background: "#F8BB00"
+    - component: widget:main_widget_Home_Card
+      config:
+        locationTitle: =props.locationTitle
+        scenesGroup: =props.scenesGroup
+        securityGroup: =props.securityGroup
+        securityMode: =props.securityMode
+        referencePIN: =props.referencePIN
+    - component: widget:main_widget_FloorsAndRooms
+    - component: f7-block
+      config:
+        style:
+          flex: 0 0 auto
+          overflow: scroll
+          margin-bottom: -4em
+          background: =props.bnavColor
+          border-radius: 0px 0px 10px 10px
+        visible: '=vars.objVar ? (vars.objVar.selectSection=="SECTION0") ? true : false : false'
+      slots:
+        default:
+          - component: f7-segmented
+            config:
+              style:
+                display: flex
+                flex-direction: row
+                justify-content: space-around
+            slots:
+              default:
+                - component: oh-link
+                  config:
+                    action: variable
+                    actionVariable: objVar
+                    actionVariableValue:
+                      selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
+                      selectThing: Security
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Security")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
+                    icon-f7: shield_fill
+                    iconBadge: =(Number(items.gDoorsOpen.state)+Number(items.gWindowsOpen.state)+Number(items.motionDetected.state))
+                    badgeColor: '=(vars.objVar && (vars.objVar.selectThing=="Security")) ? "orange" : "red"'
+                    text: Security
+                - component: oh-link
+                  config:
+                    action: variable
+                    actionVariable: objVar
+                    actionVariableValue:
+                      selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
+                      selectThing: Scenes
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Scenes")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
+                    icon-f7: rectangle_on_rectangle_angled
+                    text: Scenes
+                - component: oh-link
+                  config:
+                    action: variable
+                    actionVariable: objVar
+                    actionVariableValue:
+                      selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
+                      selectThing: Weather
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Weather")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
+                    icon-f7: cloud
+                    text: Weather
+                - component: oh-link
+                  config:
+                    action: variable
+                    actionVariable: objVar
+                    actionVariableValue:
+                      selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
+                      selectThing: Energy
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Energy")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
+                    icon-f7: bolt_fill
+                    text: Boiler
+    - component: f7-block
+      config:
+        style:
+          flex: 0 0 auto
+          overflow: scroll
+          margin-bottom: -4em
+          background: =props.bnavColor
+          border-radius: 0px 0px 10px 10px
+        visible: '=vars.objVar ? (vars.objVar.selectSection=="SECTION0") ? false : true : false'
+      slots:
+        default:
+          - component: f7-segmented
+            config:
+              style:
+                display: flex
+                flex-direction: row
+                justify-content: space-around
+            slots:
+              default:
+                - component: oh-link
+                  config:
+                    action: variable
+                    actionVariable: objVar
+                    actionVariableValue:
+                      selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
+                      selectThing: Lights
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Lights")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
+                    icon-f7: lightbulb_fill
+                    text: Lights
+                - component: oh-link
+                  config:
+                    action: variable
+                    actionVariable: objVar
+                    actionVariableValue:
+                      selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
+                      selectThing: Rollers
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Rollers")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
+                    icon-f7: archivebox
+                    text: Shades
+                - component: oh-link
+                  config:
+                    action: variable
+                    actionVariable: objVar
+                    actionVariableValue:
+                      selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
+                      selectThing: Climate
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Climate")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
+                    icon-f7: snow
+                    text: Climate
+                - component: oh-link
+                  config:
+                    action: variable
+                    actionVariable: objVar
+                    actionVariableValue:
+                      selectSection: =vars.objVar.selectSection
+                      floor: =vars.objVar.floor
+                      room: =vars.objVar.room
+                      selectThing: Appliances
+                    iconMaterial: power
+                    class: '=(vars.objVar && (vars.objVar.selectThing=="Appliances")) ? "selected_bottom_navbar_item" : "unselected_bottom_navbar_item"'
+                    text: Appliances
