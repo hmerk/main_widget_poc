@@ -43,7 +43,7 @@ To use the time based triggers, there eare some additional steps needed.
 triggers:
   - id: "1"
     configuration:
-      itemName: openBlindsKitchenWeek
+      itemName: openBlindsChildWeek
       timeOnly: true
     type: timer.DateTimeTrigger
 conditions:
@@ -55,14 +55,14 @@ conditions:
   - inputs: {}
     id: "4"
     configuration:
-      itemName: modeBlindsKitchenAuto
+      itemName: modeBlindsChildAuto
       state: ON
       operator: =
     type: core.ItemStateCondition
   - inputs: {}
     id: "5"
     configuration:
-      itemName: ShellyRollerKitchen_Control
+      itemName: rollershutterChild_Control
       state: "0"
       operator: "!="
     type: core.ItemStateCondition
@@ -71,7 +71,7 @@ actions:
     id: "2"
     configuration:
       command: UP
-      itemName: ShellyRollerKitchen_Control
+      itemName: rollershutterChild_Control
     type: core.ItemCommandAction
     '''
     
