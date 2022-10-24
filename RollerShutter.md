@@ -27,7 +27,7 @@ To use the time based triggers, there eare some additional steps needed.
     - Semantic Class: Point
     - Semantic Property: Timestamp
     Please add the following State Description (pattern) as a metadata to al 4 of those items
-    - %1$tH:%1$tM
+      - %1$tH:%1$tM
     You will then need to add initial states to the 4 items via API-Explorer.
   - Create 4 rules for opening and closing the rollershutter [optional]
     -  When : it is a daten and time specified in an item -> choose item "openBlindsChildWeekday"
