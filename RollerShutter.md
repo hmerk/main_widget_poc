@@ -35,7 +35,9 @@ To use the time based triggers, there eare some additional steps needed.
       - Ephemeris : it is a weekday
       - If modeBlindsChildAuto
       - If Rollershutter state != 0
+    
     Codepage for the rule:
+    
     '''csv
     configuration: {}
 triggers:
