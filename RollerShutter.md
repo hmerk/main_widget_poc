@@ -10,6 +10,7 @@ https://community.openhab.org/t/semantic-ui-using-enriched-semantic-to-ease-ui-c
 
 To use the time based triggers, there eare some additional steps needed.
 - Install the timepicker widget from the marketplace.
+  - https://community.openhab.org/t/time-picker/118865 
 - You will need 5 additional items in your rollershutter equipment group, here we take the rollershutters in the childroom as an example
   - A Switch item to enable/disable the automatic/time control
     - Name: modeBlindsChildAuto
